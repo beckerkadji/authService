@@ -1,0 +1,33 @@
+{
+    "entryFile": "./src/server.ts",
+    "noImplicitAdditionalProperties": "throw-on-extras",
+    "controllerPathGlobs": ["./app/controllers/*controller.ts"],
+    "spec": {
+        "outputDirectory": "build",
+        "specVersion": 3,
+        "paths": {
+            "/files/uploadFile": {
+                "post": {
+                    "consumes": [
+                        "multipart/form-data"
+                    ],
+                    "parameters": [{
+                        "in": "formData",
+                        "name": "randomFileIsHere",
+                        "required": true,
+                        "type": "file"
+                    }]
+                }
+            }
+        }
+    },
+    "routes": {
+        "routesDir": "./router",
+        "basePath": "/",
+        "entryFile": "./src/server.ts"
+    },
+    "swagger": {
+        "outputDirectory": ".",
+        "entryFile": "./src/server.ts"
+    }
+}
