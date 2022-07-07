@@ -4,6 +4,18 @@
     "controllerPathGlobs": ["./app/controllers/*controller.ts"],
     "spec": {
         "outputDirectory": "build",
+        "securityDefinitions": {
+            "Jwt": {
+                "type": "oauth2",
+                "name": "authorization",
+                "in": "header",
+                "scopes": {
+                    "root": "can do",
+                    "admin": "can do",
+                    "user": "can do"
+                }
+            }
+        },
         "specVersion": 3,
         "paths": {
             "/files/uploadFile": {
@@ -24,7 +36,8 @@
     "routes": {
         "routesDir": "./router",
         "basePath": "/",
-        "entryFile": "./src/server.ts"
+        "entryFile": "./src/server.ts",
+        "authenticationModule": "./app/middlewares/auth.ts"
     },
     "swagger": {
         "outputDirectory": ".",

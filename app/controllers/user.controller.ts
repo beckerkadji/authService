@@ -1,4 +1,4 @@
-import { Body, Get, Post, Route, Tags } from "tsoa";
+import { Body, Get, Post, Route, Tags, Security } from "tsoa";
 import {  IResponse, My_Controller } from "./controller";
 import UserType from "../types/userType";
 import { userSchema } from "../validations/user.validation";
@@ -11,7 +11,7 @@ const response = new ResponseHandler()
 @Route("/user")
 
 export class UserController extends My_Controller {
-
+    @Security("Jwt")
     @Post("")
     public async create(
         @Body() body : UserType.userCreateFields
@@ -23,7 +23,7 @@ export class UserController extends My_Controller {
            
             let userCreate = await User.create({data : body});
             if(!userCreate)
-                return response.liteResponse(code.FAILD, "Error occured during creation, try again", null)
+                return response.liteResponse(code.FAILD, "Error occurred during creation, try again", null)
 
             return response.liteResponse(code.SUCCESS, "User created with success !", body)
         }catch(e){

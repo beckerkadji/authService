@@ -60,7 +60,38 @@ export class ResponseHandler {
             response.code = code;
             response.data = data;
             return  response
-        } else {
+        }
+        else if (code == codeData.FAILURE) {
+            response.message = message;
+            response.code = code;
+            response.data = data;
+            return  response
+        }
+        else if (code == codeData.NO_TOKEN) {
+            response.message = message;
+            response.code = code;
+            response.data = data;
+            return  response
+        }
+        else if (code == codeData.NOT_FOUND) {
+            response.message = message;
+            response.code = code;
+            response.data = data;
+            return  response
+        }
+        else if (code == codeData.INVALID_TOKEN) {
+            response.message = message;
+            response.code = code;
+            response.data = data;
+            return  response
+        }
+        else if (code == codeData.NOT_AUTHORIZED) {
+            response.message = message;
+            response.code = code;
+            response.data = data;
+            return  response
+        }
+        else {
             return {code :this.code, message :this.message, data : this.data}
         }
     }
