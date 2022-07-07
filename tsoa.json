@@ -3,20 +3,21 @@
     "noImplicitAdditionalProperties": "throw-on-extras",
     "controllerPathGlobs": ["./app/controllers/*controller.ts"],
     "spec": {
+        "host": null,
         "outputDirectory": "build",
+        "specVersion": 3,
         "securityDefinitions": {
             "Jwt": {
-                "type": "oauth2",
+                "type": "apiKey",
                 "name": "authorization",
                 "in": "header",
-                "scopes": {
-                    "root": "can do",
-                    "admin": "can do",
-                    "user": "can do"
+                "scopes" : {
+                    "root" : "can do",
+                    "admin" : "can do",
+                    "user" : "can do"
                 }
             }
         },
-        "specVersion": 3,
         "paths": {
             "/files/uploadFile": {
                 "post": {

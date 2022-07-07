@@ -11,8 +11,8 @@ export const expressAuthentication = async (
     scopes? : string[],
 ) : Promise<any> => {
     try {
-        if (securityName === "jwt") {
-            const token = request.body.token || request.query.token || request.headers["x-access-token"] || request.headers["authorization"];
+        if (securityName === "Jwt") {
+            const token : any = request.body.token || request.query.token || request.headers["x-access-token"] || request.headers["authorization"];
 
             if(!token)
                 return response.liteResponse(code.NO_TOKEN, "No token provided", null)

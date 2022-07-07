@@ -1,5 +1,4 @@
 let code  : any = {
-
     SUCCESS : 5000,
     FAILURE   : 5001,
     NOT_FOUND : 5003,
