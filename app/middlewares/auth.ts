@@ -13,14 +13,17 @@ export const expressAuthentication = async (
     try {
         if (securityName === "Jwt") {
             const token : any = request.body.token || request.query.token || request.headers["x-access-token"] || request.headers["authorization"];
-
+            console.log("Verify token", token)
             if(!token)
                 return response.liteResponse(code.NO_TOKEN, "No token provided", null)
 
             let decodedToken : any
             jwt.verify(token, `[${<string>process.env.SECRET_TOKEN}]`, (err:any, decoded: any) => {
-                if(err)
+                if(err){
+                    console.log("error here")
                     return response.liteResponse(code.INVALID_TOKEN, "Invalid token provided", null)
+                }
+
 
                 //Check if JWT contains all required scopes
                 const containScopes: string[] = <string[]>scopes
@@ -32,7 +35,9 @@ export const expressAuthentication = async (
             })
             return response.liteResponse(code.SUCCESS, "SUCCESS REQUEST", {...response.data, decodedToken})
         }
+
     } catch (e){
         return response.catchHandler(e)
     }
+
 }

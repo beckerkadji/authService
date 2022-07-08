@@ -8,6 +8,11 @@ declare namespace UserType {
         lastName ?: defaultLastName,
         email : defaultEmail
     }
+
+    export interface loginFields {
+        email: defaultEmail,
+        password : string
+    }
 }
 export default UserType
 
