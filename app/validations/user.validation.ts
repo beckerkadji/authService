@@ -4,7 +4,8 @@ import  {schema}  from "../utils/schema";
 export const userSchema = Joi.object({
     firstName : schema.firstName,
     lastName : schema.lastName,
-    email : schema.email
+    email : schema.email,
+    password : schema.password,
 })
 
 export const loginSchema = Joi.object({

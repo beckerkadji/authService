@@ -6,7 +6,8 @@ declare namespace UserType {
     export interface userCreateFields {
         firstName : defaultFisrtName,
         lastName ?: defaultLastName,
-        email : defaultEmail
+        email : defaultEmail,
+        password: string
     }
 
     export interface loginFields {

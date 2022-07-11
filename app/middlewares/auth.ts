@@ -12,6 +12,7 @@ export const expressAuthentication = async (
 ) : Promise<any> => {
     try {
         if (securityName === "Jwt") {
+
             const token : any = request.body.token || request.query.token || request.headers["x-access-token"] || request.headers["authorization"];
             console.log("Verify token", token)
             if(!token)

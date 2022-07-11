@@ -2,4 +2,10 @@ import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
-export const User = prisma.user
+export enum AUTHUSER {
+    "ROOT" = "root",
+    "ADMIN" = "admin",
+    "USER" = "user"
+}
+
+export const UserModel = prisma.user
