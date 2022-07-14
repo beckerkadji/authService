@@ -4,7 +4,7 @@ import UserType from "../types/userType";
 import bcrypt from "bcryptjs"
 import jwt from "jsonwebtoken"
 import {loginSchema, userSchema} from "../validations/user.validation";
-import { UserModel } from "../models/user";
+import {AUTHUSER, UserModel} from "../models/user";
 import { ResponseHandler } from "../../src/config/responseHandler";
 import code from "../../src/config/code";
 import {USER_ROLE} from "../models/role";
@@ -15,7 +15,7 @@ const response = new ResponseHandler()
 @Route("/user")
 
 export class UserController extends My_Controller {
-    @Security("Jwt")
+    @Security("Jwt", [AUTHUSER.ROOT])
     @Post("")
     public async create(
         @Body() body : UserType.userCreateFields
