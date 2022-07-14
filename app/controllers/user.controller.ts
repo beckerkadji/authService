@@ -21,7 +21,6 @@ export class UserController extends My_Controller {
         @Body() body : UserType.userCreateFields
     ): Promise<IResponse> {
         try {
-           console.log('we enter')
             let userCreate = await UserModel.create({data : {
                     firstName: body.firstName,
                     lastName: body?.lastName,
@@ -34,7 +33,6 @@ export class UserController extends My_Controller {
 
             return response.liteResponse(code.SUCCESS, "User created with success !", body)
         }catch(e){
-            console.log("error", e)
             return response.catchHandler(e)
         }
 
