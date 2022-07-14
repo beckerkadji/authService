@@ -18,6 +18,7 @@ model User {
   password  String
   roleId    Int
   role      Role    @relation(fields: [roleId], references: [id], name: "user_role_ship")
+  token     Token[] @relation(name: "token_user_ship")
 }
 
 model Role {
@@ -25,4 +26,14 @@ model Role {
   name  String
   level Int
   User  User[] @relation(name: "user_role_ship")
+}
+
+model Token {
+  id        Int      @id @default(autoincrement())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], name: "token_user_ship")
+  jwt       String
+  expiredAt DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

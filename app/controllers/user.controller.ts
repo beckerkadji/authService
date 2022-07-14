@@ -8,6 +8,7 @@ import { UserModel } from "../models/user";
 import { ResponseHandler } from "../../src/config/responseHandler";
 import code from "../../src/config/code";
 import {USER_ROLE} from "../models/role";
+import {TokenModel} from "../models/token";
 const response = new ResponseHandler()
 
 @Tags("User Controller")
@@ -62,7 +63,14 @@ export class UserController extends My_Controller {
                 }
 
                 const token = jwt.sign(payload, <string>process.env.SECRET_TOKEN)
-                return response.liteResponse(code.SUCCESS, "Success request login", {foundUser, token})
+
+                //Create token for this user
+                const createToken = await TokenModel.create({data : {
+                    userId: foundUser.id,
+                        jwt: token,
+                        expiredAt : new Date(Date.now() + (parseInt(<string> process.env.TOKEN_DAY_VALIDITY)*24*60*60*1000))
+                    }})
+                return response.liteResponse(code.SUCCESS, "Success request login", {foundUser, createToken})
             }
 
         }
