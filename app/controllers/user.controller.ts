@@ -15,23 +15,16 @@ const response = new ResponseHandler()
 @Route("/user")
 
 export class UserController extends My_Controller {
-    @Security("Jwt", [AUTHUSER.ROOT])
-    @Post("")
-    public async create(
-        @Body() body : UserType.userCreateFields
+    @Security("Jwt")
+    @Get("")
+    public async index(
     ): Promise<IResponse> {
         try {
-            let userCreate = await UserModel.create({data : {
-                    firstName: body.firstName,
-                    lastName: body?.lastName,
-                    email: body.email,
-                    password:body.password,
-                    roleId: USER_ROLE.USER
-                }});
-            if(!userCreate)
-                return response.liteResponse(code.FAILD, "Error occurred during creation, try again", null)
+            let findUser = await UserModel.findMany();
+            if(!findUser)
+                return response.liteResponse(code.FAILD, "Error occurred during Finding ! Try again", null)
 
-            return response.liteResponse(code.SUCCESS, "User created with success !", body)
+            return response.liteResponse(code.SUCCESS, "User found with success !", findUser)
         }catch(e){
             return response.catchHandler(e)
         }

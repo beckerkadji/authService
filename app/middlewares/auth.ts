@@ -6,29 +6,26 @@ import {RoleModel, USER_ROLE} from "../models/role";
 import {AUTHUSER} from "../models/user";
 
 export const expressAuthentication = async (
-    request :Request,
+    request : express.Request,
     securityName : string,
     scopes? : string[],
 ) : Promise<any> => {
     try {
-
         const authorization : any = request.body.authorization || request.query.authorization || request.headers["authorization"];
         const params = scopes ? scopes : [];
 
         if (securityName === "Jwt") {
             const token : any = await checkAuthorization(authorization)
-            console.log("token is", token)
             if(token){
                 if (await typeRole(token.user, params[0]))
-                    return Promise.resolve(token.user)
+                    return Promise.resolve(`token here ${token.user}`)
             }
             throw new Error("You don't have a permission");
         }
     } catch (e: any){
-        return Promise.reject(new Error(e))
+        console.log("error", e)
+        return Promise.reject(new Error(e.m))
     }
-
-
 }
 
 export const checkAuthorization = async (authorization ?: string) => {
@@ -38,13 +35,8 @@ export const checkAuthorization = async (authorization ?: string) => {
     const decoded : any = jwt.decode(authorization);
 
     if (!decoded || decoded instanceof (JsonWebTokenError || TokenExpiredError)){
-        throw new Error("Incorrect token");
+       throw new Error("Incorrect token");
     }
-
-    if (!decoded){
-        throw new Error("Incorrect token");
-    }
-
     const token = await TokenModel.findFirst({where : {jwt : authorization}, include : {user : {include : {role : true}}}});
     if (!token)
         throw new Error("Token not found");

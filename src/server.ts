@@ -11,9 +11,6 @@ import { RegisterRoutes } from '../router/routes';
 import {ResponseHandler} from "./config/responseHandler"
 const Response = new ResponseHandler()
 
-
-ResponseHandler
-
 dotenv.config()
 
 export const app: express.Application = express();

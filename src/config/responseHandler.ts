@@ -3,6 +3,7 @@ import { ValidateError } from "tsoa";
 import { IResponse } from "../../app/controllers/controller";
 import codeData from "./code"
 
+
 export class ResponseHandler {
 
     code = 0;
@@ -10,13 +11,12 @@ export class ResponseHandler {
     data = {}
 
     public errorHandlerValidation(
-        err: unknown,
+        err: any,
         req: express.Request,
         res: express.Response,
         next: NextFunction
     ): express.Response | void {
 
-        console.log(typeof err)
         if ( err instanceof ValidateError) {
             console.warn(`Caught Validation Error for ${req.path}:`, err.fields)
             return res.status(422).json({
@@ -27,16 +27,11 @@ export class ResponseHandler {
         
         if (err instanceof Error) {
             return res.status(500).json({
-                message : "Internal Server Error"
+                message : "Internal Server Error",
+                stack : err.stack,
             });
         }
 
-        if (err) {
-            return res.status(422).json({
-                message : "Error",
-                details: err
-            })
-        }
         next();
     }
 

@@ -23,30 +23,9 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "defaultFisrtName": {
-        "dataType": "refAlias",
-        "type": {"dataType":"string","validators":{}},
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "defaultLastName": {
-        "dataType": "refAlias",
-        "type": {"dataType":"string","validators":{}},
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "defaultEmail": {
         "dataType": "refAlias",
         "type": {"dataType":"string","validators":{}},
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "UserType.userCreateFields": {
-        "dataType": "refObject",
-        "properties": {
-            "firstName": {"ref":"defaultFisrtName","required":true},
-            "lastName": {"ref":"defaultLastName"},
-            "email": {"ref":"defaultEmail","required":true},
-            "password": {"dataType":"string","required":true},
-        },
-        "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "UserType.loginFields": {
@@ -68,14 +47,13 @@ export function RegisterRoutes(app: express.Router) {
     //  NOTE: If you do not see routes for all of your controllers in this file, then you might not have informed tsoa of where to look
     //      Please look into the "controllerPathGlobs" config option described in the readme: https://github.com/lukeautry/tsoa
     // ###########################################################################################################
-        app.post('/user',
-            authenticateMiddleware([{"Jwt":["root"]}]),
+        app.get('/user',
+            authenticateMiddleware([{"Jwt":[]}]),
             ...(fetchMiddlewares<RequestHandler>(UserController)),
-            ...(fetchMiddlewares<RequestHandler>(UserController.prototype.create)),
+            ...(fetchMiddlewares<RequestHandler>(UserController.prototype.index)),
 
-            function UserController_create(request: any, response: any, next: any) {
+            function UserController_index(request: any, response: any, next: any) {
             const args = {
-                    body: {"in":"body","name":"body","required":true,"ref":"UserType.userCreateFields"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -87,7 +65,7 @@ export function RegisterRoutes(app: express.Router) {
                 const controller = new UserController();
 
 
-              const promise = controller.create.apply(controller, validatedArgs as any);
+              const promise = controller.index.apply(controller, validatedArgs as any);
               promiseHandler(controller, promise, response, undefined, next);
             } catch (err) {
                 return next(err);
