@@ -114,7 +114,6 @@ export class UserController extends My_Controller {
         try {
             console.log(req.headers['authorization'])
             const token = await TokenModel.findFirst({where: {jwt : req.headers['authorization']}})
-            console.log(token)
             if(!token)
                 return response.liteResponse(code.FAILURE, "Token not found",null)
 

@@ -4,6 +4,8 @@ import {JsonWebTokenError, TokenExpiredError} from "jsonwebtoken";
 import {TokenModel} from "../models/token";
 import {RoleModel, USER_ROLE} from "../models/role";
 import {AUTHUSER} from "../models/user";
+import {Middleware_Error} from "../../src/config/Middleware_Error";
+
 
 export const expressAuthentication = async (
     request : express.Request,
@@ -20,31 +22,31 @@ export const expressAuthentication = async (
                 if (await typeRole(token.user, params[0]))
                     return Promise.resolve(`token here ${token.user}`)
             }
-            throw new Error("You don't have a permission");
+            throw new Middleware_Error("You don't have a permission");
         }
     } catch (e: any){
-        console.log("error", e)
-        return Promise.reject(new Error(e.m))
+        return Promise.reject(new Middleware_Error(e.m))
     }
 }
 
 export const checkAuthorization = async (authorization ?: string) => {
     if (!authorization)
-        throw new Error("Token not found");
+        throw new Middleware_Error("Token Not Found")
+
 
     const decoded : any = jwt.decode(authorization);
 
     if (!decoded || decoded instanceof (JsonWebTokenError || TokenExpiredError)){
-       throw new Error("Incorrect token");
+       throw new Middleware_Error("Incorrect token");
     }
     const token = await TokenModel.findFirst({where : {jwt : authorization}, include : {user : {include : {role : true}}}});
     if (!token)
-        throw new Error("Token not found");
+        throw new Middleware_Error("Token not found");
     if (token.expiredAt < new Date())
-        throw new Error("Token expired");
+        throw new Middleware_Error("Token expired");
     if (token)
         return token;
-    throw new Error("Unknown token")
+    throw new Middleware_Error("Unknown token")
 }
 
 const typeRole = async (user : any, role ?: string) => {
@@ -54,7 +56,7 @@ const typeRole = async (user : any, role ?: string) => {
     const roleValue = normalizeRole(role);
     const askRole = await RoleModel.findFirst({where : {id : roleValue}})
     if (!askRole)
-        throw new Error("Role not found");
+        throw new Middleware_Error("Role not found");
 
     if (user.role.level >= askRole.level)
         return true;

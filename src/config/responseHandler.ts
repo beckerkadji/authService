@@ -2,6 +2,7 @@ import express, {NextFunction} from "express";
 import { ValidateError } from "tsoa";
 import { IResponse } from "../../app/controllers/controller";
 import codeData from "./code"
+import {Middleware_Error} from "./Middleware_Error";
 
 
 export class ResponseHandler {
@@ -24,13 +25,22 @@ export class ResponseHandler {
                 details: err?.fields,
             })
         }
-        
-        if (err instanceof Error) {
-            return res.status(500).json({
-                message : "Internal Server Error Or Request error!",
-                stack : err.stack,
+
+        if(err instanceof Middleware_Error ){
+                return res.status(401).json({
+                    code : codeData.NOT_AUTHORIZED,
+                    message: err.message || "NOT_AUTHORIZED"
+                });
+        }
+
+        if(err instanceof Error ){
+            return res.status(400).json({
+                message : "Request error",
+                details: err.stack
             });
         }
+        
+
 
         next();
     }
