@@ -41,7 +41,7 @@ async function main() {
           lastName : "kadji",
           email: "kadjibecker@gmail.com",
           roleId: USER_ROLE.ROOT,
-          password : bcrypt.hashSync('password',20)
+          password : bcrypt.hashSync('password',10)
       }
   })
     console.log(user)

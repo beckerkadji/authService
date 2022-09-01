@@ -9,7 +9,6 @@ import { ResponseHandler } from "../../src/config/responseHandler";
 import code from "../../src/config/code";
 import {USER_ROLE} from "../models/role";
 import {TokenModel} from "../models/token";
-import express from "express";
 const response = new ResponseHandler()
 
 @Tags("User Controller")
@@ -61,8 +60,11 @@ export class UserController extends My_Controller {
                     userId: foundUser.id,
                         jwt: token,
                         expiredAt : new Date(Date.now() + (parseInt(<string> process.env.TOKEN_DAY_VALIDITY)*24*60*60*1000))
+                    }, select : {
+                        jwt: true
                     }})
-                return response.liteResponse(code.SUCCESS, "Success request login", {foundUser, createToken})
+                const jwtToken : any = createToken.jwt
+                return response.liteResponse(code.SUCCESS, "Success request login", {...foundUser, token: jwtToken})
             }
 
         }
@@ -82,19 +84,22 @@ export class UserController extends My_Controller {
                 return response.liteResponse(code.VALIDATION_ERROR, "Validation Error !", validate)
 
             //Check if email already exist
+            console.log("Check Email...")
             const verifyEmail = await UserModel.findFirst({where:{email : body.email}})
             if(verifyEmail)
                 return response.liteResponse(code.FAILURE, "Email already exist, Try with another email")
+            console.log("Check Email finished")
 
             //save user
+            console.log("Create user...")
             const createUser = await UserModel.create({data: {
                     firstName: body.firstName,
                     lastName: body.lastName,
                     email: body.email,
-                    password: bcrypt.hashSync(body.password, 20),
+                    password: bcrypt.hashSync(body.password, 10),
                     roleId: USER_ROLE.USER
                 }})
-
+            console.log("Create user Success")
             return response.liteResponse(code.SUCCESS, "User registered with Success !", createUser)
         }catch (e){
             return response.catchHandler(e)
@@ -102,6 +107,7 @@ export class UserController extends My_Controller {
     }
 
     @Get('logout')
+    @Security("Jwt")
     public async logout(
         @Request() req : any
     ): Promise<IResponse> {
