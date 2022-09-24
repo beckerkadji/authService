@@ -53,15 +53,17 @@ export class UserController extends My_Controller {
                     email : foundUser.email
                 }
 
-                const token = jwt.sign(payload, <string>process.env.SECRET_TOKEN)
-
+                const token = jwt.sign(payload, <string>process.env.SECRET_TOKEN, { expiresIn: '24h'})
+                console.log(token)
+                const decode: any = jwt.decode(token)
+                console.log(decode.exp)
                 //Create token for this user
                 const createToken = await TokenModel.create({data : {
                     userId: foundUser.id,
                         jwt: token,
-                        expiredAt : new Date(Date.now() + (parseInt(<string> process.env.TOKEN_DAY_VALIDITY)*24*60*60*1000))
+                        expireIn : decode.exp
                     }, select : {
-                        jwt: true
+                        jwt: true,
                     }})
                 const jwtToken : any = createToken.jwt
                 return response.liteResponse(code.SUCCESS, "Success request login", {...foundUser, token: jwtToken})
@@ -112,13 +114,13 @@ export class UserController extends My_Controller {
         @Request() req : any
     ): Promise<IResponse> {
         try {
-            console.log(req.headers['authorization'])
             const token = await TokenModel.findFirst({where: {jwt : req.headers['authorization']}})
             if(!token)
                 return response.liteResponse(code.FAILURE, "Token not found",null)
 
+            let expirate  = Math.round((new Date().getTime() / 1000) / 2)
             await TokenModel.update({where : {id: token.id}, data: {
-                    expiredAt: new Date()
+                    expireIn: expirate,
                 }})
             return response.liteResponse(code.SUCCESS, "Logout with success !", null)
         }catch (e){

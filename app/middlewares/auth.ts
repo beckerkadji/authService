@@ -42,7 +42,7 @@ export const checkAuthorization = async (authorization ?: string) => {
     const token = await TokenModel.findFirst({where : {jwt : authorization}, include : {user : {include : {role : true}}}});
     if (!token)
         throw new Middleware_Error("Token not found");
-    if (token.expiredAt < new Date())
+    if (token.expireIn < Math.round(new Date().getTime() / 1000))
         throw new Middleware_Error("Token expired");
     if (token)
         return token;
