@@ -53,10 +53,8 @@ export class UserController extends My_Controller {
                     email : foundUser.email
                 }
 
-                const token = jwt.sign(payload, <string>process.env.SECRET_TOKEN, { expiresIn: '24h'})
-                console.log(token)
+                const token = jwt.sign(payload, <string>process.env.SECRET_TOKEN, { expiresIn: '1d'})
                 const decode: any = jwt.decode(token)
-                console.log(decode.exp)
                 //Create token for this user
                 const createToken = await TokenModel.create({data : {
                     userId: foundUser.id,
