@@ -50,6 +50,6 @@ try {
 
 
 app.listen( port,hostname, () =>{
-    console.log(`Express server is starded at http://${hostname}:${port}`);
+    console.log(`Express server is started on port ${port}`);
 })
                                                                                             
