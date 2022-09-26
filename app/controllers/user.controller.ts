@@ -3,7 +3,7 @@ import {  IResponse, My_Controller } from "./controller";
 import UserType from "../types/userType";
 import bcrypt from "bcryptjs"
 import jwt from "jsonwebtoken"
-import {loginSchema, userCreateSchema} from "../validations/user.validation";
+import {userCreateSchema} from "../validations/user.validation";
 import {AUTHUSER, UserModel} from "../models/user";
 import { ResponseHandler } from "../../src/config/responseHandler";
 import code from "../../src/config/code";
@@ -72,7 +72,6 @@ export class UserController extends My_Controller {
             return response.catchHandler(e)
         }
     }
-
 
     @Post("register")
     public async register(
