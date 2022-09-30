@@ -23,6 +23,7 @@
         "formdata-node": "^4.3.3",
         "joi": "^17.6.0",
         "jsonwebtoken": "^8.5.1",
+        "kill-port": "^2.0.1",
         "portfinder": "^1.0.28",
         "streamifier": "^0.1.1",
         "swagger-ui-express": "^4.4.0",
