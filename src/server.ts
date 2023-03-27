@@ -44,6 +44,14 @@ RegisterRoutes(app)
 app.use(Response.errorHandlerValidation)
 //app.use(Response.notFoundHandler)
 
+app.get('/health', (req, res) =>{
+    const data = {
+        uptime: process.uptime(),
+        message: 'Ok',
+        date: new Date()
+    }
+    res.status(200).send(data)
+})
 
 try {
     const swaggerDocument = require ('../build/swagger.json');
