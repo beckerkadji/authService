@@ -11,21 +11,30 @@ datasource db {
 }
 
 model User {
-  id        String  @id @default(uuid())
-  email     String  @unique
-  firstName String
-  lastName  String?
-  password  String
-  roleId    Int
-  role      Role    @relation(fields: [roleId], references: [id], name: "user_role_ship")
-  token     Token[] @relation(name: "token_user_ship")
+  id          String            @id @default(uuid())
+  parent_id   String?
+  parent      User?             @relation("ParentChilds", fields: [parent_id], references: [id])
+  childs      User[]            @relation("ParentChilds")
+  permissions user_permission[]
+  phone       String            @unique
+  email       String            @unique
+  firstName   String
+  lastName    String?
+  password    String
+  roleId      Int
+  role        Role              @relation(fields: [roleId], references: [id])
+  token       Token[]           @relation(name: "token_user_ship")
+  blocked_at  DateTime?
+  verified_at DateTime?
+  deleted_at  DateTime?
+  created_at  DateTime          @default(now())
+  updated_at  DateTime          @updatedAt
 }
 
 model Role {
   id    Int    @id @default(autoincrement())
-  name  String
-  level Int
-  User  User[] @relation(name: "user_role_ship")
+  name  String @unique
+  users User[]
 }
 
 model Token {
@@ -36,4 +45,27 @@ model Token {
   expireIn  Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model permission {
+  name  String            @id
+  users user_permission[]
+}
+
+model user_permission {
+  user_id       String
+  user          User       @relation(fields: [user_id], references: [id])
+  permission_id String
+  permission    permission @relation(fields: [permission_id], references: [name])
+
+  @@id([user_id, permission_id])
+}
+
+model forgot_password {
+  id         String   @id @default(uuid())
+  username   String   @unique
+  otp        String   @db.VarChar(8)
+  expired_at DateTime
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 }

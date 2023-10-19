@@ -8,4 +8,11 @@ export enum USER_ROLE {
     USER= 3
 }
 
-export const RoleModel = prisma.role;
+export enum ROLE_HR {
+    ROOT = "root",
+    ADMIN = "admin",
+    USER = "user",
+    INTERN = "intern"
+}
+
+export const roleModel = prisma.role;

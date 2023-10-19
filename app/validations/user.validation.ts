@@ -6,6 +6,7 @@ export const userCreateSchema = Joi.object({
     lastName : schema.lastName,
     email : schema.email,
     password : schema.password,
+    phone : schema.phone
 })
 
 export const loginSchema = Joi.object({

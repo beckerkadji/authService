@@ -1,8 +1,8 @@
 import dotenv from "dotenv";
 import { Controller } from "tsoa";
 import cloudinary from "cloudinary";
-import streamifier from "streamifier"
-import { InvalidatedProjectKind } from "typescript";
+import streamifier from "streamifier";
+import Mailer from "../../src/core/notifications/mail";
 
 
 dotenv.config();
@@ -38,6 +38,15 @@ export class My_Controller extends Controller {
             return true
         }
         
+    }
+
+    public async sendMailFromTemplate (config : {
+        to : string | string[],
+        subject : string,
+        modelName : string,
+        data ?: object
+    }) : Promise<void> {
+        return await Mailer.sendFromTemplate(config.to, config.subject, "", config.modelName, config.data);
     }
 
     /**
